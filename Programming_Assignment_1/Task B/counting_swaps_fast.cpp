@@ -41,23 +41,31 @@ long long count_swaps(int L, int R, std::vector<int>& W, std::vector<int>& temp,
     
     // sort by choosing the minimum of both subarrays
     int index1 = L, index2 = M + 1, index3 = 0;
+    
+    // two pointer method
+    int p1 = index1;
+    int p2 = index2;
+    // Check this loop
+    while (p1 <= M && p2 <= R) {
+        if (W[p1] - W[p2] > D) {
+            swaps += M - p1 + 1;
+            p2++;
+        } else {
+            // W[p1] is smaller
+            // W[p1] is larger but still not that big
+            p1++;
+        }
+    }
+    
     while (index1 <= M && index2 <= R) {
         if (W[index1] <= W[index2]) {
             temp[index3++] = W[index1++];
         } else {
-            // add number of swaps equal to number of elements remaining in left subarray
-            // Hint: you need to modify this part to solve both parts of your assignment
-            auto it = lower_bound(W.begin()+index1, W.begin()+M, W[index2]+D+1);
-            if (*it > W[index2] + D) {
-                int dist_ = distance(W.begin(), it);
-                swaps += M - dist_ + 1;
-            }
-            
             
             temp[index3++] = W[index2++];
         }
     }
-    
+
     // add any remaining elements in left subarray
     while (index1 <= M)
         temp[index3++] = W[index1++];
